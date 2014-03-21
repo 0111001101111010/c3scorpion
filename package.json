@@ -9,6 +9,7 @@
     "express": "3.4.8",
     "jade": "*",
     "request": "~2.34.0",
-    "cheerio": "~0.13.1"
+    "cheerio": "~0.13.1",
+    "lodash": "~2.4.1"
   }
 }
