@@ -10,7 +10,7 @@ var http = require('http');
 var path = require('path');
 var request = require('request');
 var cheerio = require('cheerio');
-
+var _       = require('lodash');
 var app = express();
 
 // all environments
@@ -111,8 +111,18 @@ var __request = function (urls, callback) {
 app.get('/multi',function(req,res){
 // create an array of URLs
 //var urls = ["http://www.example.com/firts", "http://www.example.com/second", "http://www.example.com/third"];
-//maybe generate a bunch for a test
-var urls = ["http://hpcr.cs.odu.edu/c3scorpion/c3scorpion_results.php?userid=230","http://hpcr.cs.odu.edu/c3scorpion/c3scorpion_results.php?userid=231"];
+  //maybe generate a bunch for a test
+  //base url http://hpcr.cs.odu.edu/c3scorpion/c3scorpion_results.php?userid=
+
+
+//var urls = ["http://hpcr.cs.odu.edu/c3scorpion/c3scorpion_results.php?userid=230","http://hpcr.cs.odu.edu/c3scorpion/c3scorpion_results.php?userid=231"];
+var urls =[];
+var offset=140;
+_.times(25, function(n) {
+var link = "http://hpcr.cs.odu.edu/c3scorpion/c3scorpion_results.php?userid="+(n+offset);
+console.log(link);
+urls.push(link); });
+
 var html;
 // execute the request
 // and assign a callback
@@ -178,7 +188,7 @@ __request(urls, function(responses) {
 
 		if (response.body) {
 			//console.log("Render", url, response.body);
-     html = html+response.body ;
+     html =html +  "<h2>"+url+"</h2>"+response.body ;
      //console.log(html);
 		}
 	}
