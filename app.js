@@ -113,7 +113,7 @@ app.get('/multi',function(req,res){
 //var urls = ["http://www.example.com/firts", "http://www.example.com/second", "http://www.example.com/third"];
 //maybe generate a bunch for a test
 var urls = ["http://hpcr.cs.odu.edu/c3scorpion/c3scorpion_results.php?userid=230","http://hpcr.cs.odu.edu/c3scorpion/c3scorpion_results.php?userid=231"];
-
+var html;
 // execute the request
 // and assign a callback
 __request(urls, function(responses) {
@@ -163,7 +163,6 @@ __request(urls, function(responses) {
 	// You can simply iterate all responses
 	// to find errors or process the response
 	var url, response;
-
 	for (url in responses) {
 		// reference to the response object
 		response = responses[url];
@@ -176,11 +175,14 @@ __request(urls, function(responses) {
 
 		// render body
     //gives the body do some cheerio magic
+
 		if (response.body) {
-			console.log("Render", url, response.body);
+			//console.log("Render", url, response.body);
+     html = html+response.body ;
+     //console.log(html);
 		}
 	}
-
+res.send(html);
 });
 
 });
