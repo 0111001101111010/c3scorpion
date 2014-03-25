@@ -12,6 +12,8 @@ var request = require('request');
 var cheerio = require('cheerio');
 var _       = require('lodash');
 var app = express();
+var passport = require('passport');
+var OpenIDStrategy = require('passport-openid').Strategy;
 
 // all environments
 app.set('port', process.env.PORT || 3000);
@@ -32,7 +34,6 @@ if ('development' == app.get('env')) {
 
 app.get('/', routes.index);
 app.get('/users', user.list);
-
 app.get('/info', function(req,res){
     request('http://hpcr.cs.odu.edu/c3scorpion/c3scorpion_results.php?userid=231', function (error, response, html) {
       if (!error && response.statusCode == 200) {
