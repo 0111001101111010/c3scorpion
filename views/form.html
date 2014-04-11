@@ -1,7 +1,7 @@
 <center>
 <form action="http://hpcr.cs.odu.edu/c3scorpion/c3scorpion_exec.php" method="post">
 		<label for="qtitle">Tile</label>
-		<input name="qtitle" id="inputUsername">
+		<input name="qtitle" id="inputTitle">
 		<br>
 		<label for="email">Email</label>
 		<input name="email" id="inputEmail">
@@ -16,11 +16,11 @@
 <script type='text/javascript'>
 
 
-	var inputUsername = new LiveValidation( "inputUsername", {
-			 validMessage: "Welcome friend!", wait: 500 } );
-				inputUsername.add( Validate.Presence, {
-					 failureMessage: "Your name has to be at least 4 characters" } );
-				inputUsername.add( Validate.Length, { minimum: 4});
+	var inputTitle = new LiveValidation( "inputTitle", {
+			 validMessage: "Valid", wait: 500 } );
+				inputTitle.add( Validate.Presence, {
+					 failureMessage: "Your Title has to be at least 4 characters" } );
+				inputTitle.add( Validate.Length, { minimum: 4});
   var inputEmail = new LiveValidation( "inputEmail", {
 			 validMessage: "Valid Email!", wait: 500 } );
 			inputEmail.add( Validate.Presence, {
@@ -33,6 +33,7 @@
 		  validMessage: "Good Sequence", wait: 500 } );
 		  inputSequence.add( Validate.Presence, {
 				 failureMessage: "Sequence Required" } );
-			inputSequence.add( Validate.Length, { minimum: 40});
+			inputSequence.add( Validate.Format, {pattern: /[^bjouxz]/, failureMessage: "Letters not allowed" })
+		  inputSequence.add( Validate.Length, { minimum: 40});
 			inputSequence.add( Validate.Length, { maximum: 1000});
 </script>
