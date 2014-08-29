@@ -40,47 +40,14 @@ app.get('/info', function(req,res){
         var $ = cheerio.load(html);
         var parsedResults;
         $('.auto-style28').parent().each(function(i, element){
-          //console.log($(this).text());
-          //console.log($(this).html());
-
           var title = $('.auto-style7').html();
           var prediction = $('.auto-style6').html();
           parsedResults=title+"<br><br>"+prediction;
-          //parsedResults=$(this).html();
           var metadata ={
               prediction:prediction
           };
-          //parsedResults.push(JSON.stringify($(this)));
-          // Select the previous element
-          //var a = $(this).prev();
-          // Get the rank by parsing the element two levels above the "a" element
-          //var rank = a.parent().parent().text();
-          // Parse the link title
-          //var title = a.text();
-          // Parse the href attribute from the "a" element
-          //var url = a.attr('href');
-          // Get the subtext children from the next row in the HTML table.
-          //var subtext = a.parent().parent().next().children('.subtext').children();
-          // Extract the relevant data from the children
-          //var points = $(subtext).eq(0).text();
-          //var username = $(subtext).eq(1).text();
-          //var comments = $(subtext).eq(2).text();
-          // Our parsed meta data object
-          /*var metadata = {
-            rank: parseInt(rank),
-            title: title,
-            url: url,
-            points: parseInt(points),
-            username: username,
-            comments: parseInt(comments)
-          };
-          */
-          // Push meta-data into parsedResults array
-          //parsedResults.push(metadata);
         });
-        // Log our finished parse results in the terminal
         res.send(parsedResults);
-        //console.log(parsedResults);
       }
     });
 
@@ -110,69 +77,18 @@ var __request = function (urls, callback) {
 };
 
 app.get('/multi',function(req,res){
-// create an array of URLs
-//var urls = ["http://www.example.com/firts", "http://www.example.com/second", "http://www.example.com/third"];
-  //maybe generate a bunch for a test
-  //base url http://hpcr.cs.odu.edu/c3scorpion/c3scorpion_results.php?userid=
-
 
 //var urls = ["http://hpcr.cs.odu.edu/c3scorpion/c3scorpion_results.php?userid=230","http://hpcr.cs.odu.edu/c3scorpion/c3scorpion_results.php?userid=231"];
 var urls =[];
-var offset=140;
+var offset = parseInt(req.query.page) || 0;
+console.log(req.query.page);
 _.times(25, function(n) {
 var link = "http://hpcr.cs.odu.edu/c3scorpion/c3scorpion_results.php?userid="+(n+offset);
-console.log(link);
 urls.push(link); });
 
-var html;
-// execute the request
-// and assign a callback
+var html = '';
 __request(urls, function(responses) {
 
-	// When all the requests are ready
-	// this callback will be called
-	// you will get an argument, is
-	// a map with all the responses
-	// of the request you made,
-	// something like this:
-	/*
-		responses = {
-			"http://www.example.com/firts": {
-				error: [object Object],
-				response: [object Object],
-				body: [object Object]
-			},
-			"http://www.example.com/second": {
-				error: [object Object],
-				response: [object Object],
-				body: [object Object]
-			},
-			"http://www.example.com/third": {
-				error: [object Object],
-				response: [object Object],
-				body: [object Object]
-			}
-		}
-	*/
-
-
-	// Acces to a response:
-
-	// direct reference
-	//var first_response = responses["http://www.google.com"];
-		// check for errors of the first response
-		//console.log(first_response.error);
-		// access to the body of the first response
-		//console.log(first_response.body);
-
-	// also you can reuse the reference on the original array
-//	var first_response = response[urls[0]];
-
-
-	// Iterate responses:
-
-	// You can simply iterate all responses
-	// to find errors or process the response
 	var url, response;
 	for (url in responses) {
 		// reference to the response object
@@ -183,17 +99,20 @@ __request(urls, function(responses) {
 			console.log("Error", url, response.error);
 			return;
 		}
-
-		// render body
-    //gives the body do some cheerio magic
-
 		if (response.body) {
-			//console.log("Render", url, response.body);
-     html =html +  "<h2>"+url+"</h2>"+response.body ;
-     //console.log(html);
+     html = html +  "<h2>"+url+"</h2>"+response.body ;
 		}
 	}
-res.send(html);
+  //create a next and last button
+  // '/multi?
+  //<br><br>
+  var controls = '';
+  var makeLink = function (arg){
+    return "<a href='/multi?page=" + parseInt(arg) +"'>NextPage</a>";
+  };
+  controls =  controls+ makeLink(offset+25);
+  controls = "<div id='controls'>" + controls + "</div>";
+res.send(html+controls);
 });
 
 });
